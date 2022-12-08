@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:todo/home/settings/settings_tab.dart';
 import 'package:todo/home/tasks_list/tasks_list_tab.dart';
 
+import 'add_task_bottom_sheet.dart';
+
 class HomeScreen extends StatefulWidget {
   static const String routeName = 'home';
 
@@ -50,4 +52,10 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
   var tabs = [TasksListTab(),SettingsTab()];
+
+  void showAddTaskBottomSheet(){
+    showModalBottomSheet(context: context, builder: (buildContext){
+      return AddTaskBottomSheet();
+    });
+  }
 }
