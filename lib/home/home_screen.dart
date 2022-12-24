@@ -27,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
           side: BorderSide(color: Colors.white,width: 4)
         ),
         onPressed: (){
-
+          showAddTaskBottomSheet();
         },
         child: Icon(Icons.add),
       ),
@@ -56,6 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void showAddTaskBottomSheet(){
     showModalBottomSheet(context: context, builder: (buildContext){
       return AddTaskBottomSheet();
-    });
+    }, isScrollControlled: true,
+    );
   }
 }

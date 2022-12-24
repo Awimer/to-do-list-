@@ -12,10 +12,16 @@ class MyDatabase {
       return task.toFireStore();
     });
   }
-  static void insertTask (Task task){
+  static Future<void> insertTask (Task task){
     var tasksCollection = getTaskCollection();
-    var taskDoc = tasksCollection.doc();
-    task.id = taskDoc.id;
-    taskDoc.set(task);
+    var doc = tasksCollection.doc();
+    task.id = doc.id;
+    return doc.set(task);
+  }
+  static Future<List<Task>> getAllTasks()async{
+    QuerySnapshot<Task> querySnapshot = await getTaskCollection()
+        .get();
+    List<Task> tasks = querySnapshot.docs.map((element) => element.data()).toList();
+    return tasks;
   }
 }

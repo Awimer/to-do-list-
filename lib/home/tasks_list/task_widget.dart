@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:todo/database/task.dart';
 import 'package:todo/my_theme.dart';
 
 class TaskWidget extends StatelessWidget{
-
+  Task task;
+  TaskWidget(this.task);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -45,11 +47,11 @@ class TaskWidget extends StatelessWidget{
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                Text('this is title',style: Theme.of(context).textTheme.titleMedium,),
+                Text(task.title??'',style: Theme.of(context).textTheme.titleMedium,),
                 SizedBox(height: 8,),
                 Row(children: [
                   Icon(Icons.access_time,),
-                  Text('10:30 am',style:Theme.of(context).textTheme.bodySmall,)
+                  Text(task.description??'',style:Theme.of(context).textTheme.bodySmall,)
                 ],),
               ],),
             ),

@@ -1,5 +1,7 @@
 import 'package:calendar_timeline/calendar_timeline.dart';
 import 'package:flutter/material.dart';
+import 'package:todo/database/my_database.dart';
+import 'package:todo/database/task.dart';
 import 'package:todo/home/tasks_list/task_widget.dart';
 
 class TasksListTab extends StatelessWidget{
@@ -26,9 +28,28 @@ class TasksListTab extends StatelessWidget{
             locale: 'en_ISO',
           ),
           Expanded(
-            child: ListView.builder(itemBuilder: (_,index){
-              return TaskWidget();
-            },itemCount: 20,),
+            child: FutureBuilder<List<Task>>(
+              future: MyDatabase.getAllTasks(),
+              builder: (buildContext,snapshot){
+                if (snapshot.hasError){
+                  return Column(
+                    children: [
+                      Text('Error loading data,'
+                          'please try again later')
+                  ],);
+                }
+                else if (snapshot.connectionState == ConnectionState.waiting){
+                  // is loading
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                var data = snapshot.data;
+                return ListView.builder(itemBuilder: (buildContext,index){
+                  return TaskWidget(data![index]);
+                },itemCount: data!.length, );
+              },
+            ),
           )
         ],
       ),
