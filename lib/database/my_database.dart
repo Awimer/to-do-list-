@@ -18,10 +18,20 @@ class MyDatabase {
     task.id = doc.id;
     return doc.set(task);
   }
-  static Future<List<Task>> getAllTasks()async{
-    QuerySnapshot<Task> querySnapshot = await getTaskCollection()
+  static Future<QuerySnapshot<Task>> getAllTasks()async{
+    // read data once
+    return await getTaskCollection()
         .get();
-    List<Task> tasks = querySnapshot.docs.map((element) => element.data()).toList();
-    return tasks;
   }
+  static Stream<QuerySnapshot<Task>> listenForTasksRealTimeUpdates(){
+    // listen for real time updates
+    return getTaskCollection()
+        .snapshots();
+  }
+  static Future <void> deleteTask(Task task){
+    var taskDoc = getTaskCollection()
+        .doc(task.id);
+    return taskDoc.delete();
+  }
+
 }

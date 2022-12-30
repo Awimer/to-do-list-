@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:todo/database/my_database.dart';
 import 'package:todo/database/task.dart';
+import 'package:todo/dialoge_utils.dart';
 import 'package:todo/my_theme.dart';
 
 class TaskWidget extends StatelessWidget{
@@ -15,7 +17,18 @@ class TaskWidget extends StatelessWidget{
           motion: DrawerMotion(),
           children: [
             SlidableAction(onPressed: (_){
-
+              MyDatabase.deleteTask(task)
+                  .then((value) {
+                    showMessage(context, 'Task deleted successfully'
+                        ,posActionName: 'ok');
+              })
+                  .onError((error, stackTrace) {
+                showMessage(context, 'something went wrong'
+                ,posActionName: 'please try again later');
+              })
+                  .timeout(Duration(seconds: 5),onTimeout: (){
+                    showMessage(context, 'Data deleted locally',posActionName: 'ok');
+              });
             },
               icon: Icons.delete,
               backgroundColor: MyTheme.red,

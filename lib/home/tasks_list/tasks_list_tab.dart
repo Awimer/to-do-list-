@@ -1,4 +1,5 @@
 import 'package:calendar_timeline/calendar_timeline.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:todo/database/my_database.dart';
 import 'package:todo/database/task.dart';
@@ -28,8 +29,8 @@ class TasksListTab extends StatelessWidget{
             locale: 'en_ISO',
           ),
           Expanded(
-            child: FutureBuilder<List<Task>>(
-              future: MyDatabase.getAllTasks(),
+            child: StreamBuilder<QuerySnapshot<Task>>(
+              stream: MyDatabase.listenForTasksRealTimeUpdates(),
               builder: (buildContext,snapshot){
                 if (snapshot.hasError){
                   return Column(
@@ -44,7 +45,7 @@ class TasksListTab extends StatelessWidget{
                     child: CircularProgressIndicator(),
                   );
                 }
-                var data = snapshot.data;
+                var data = snapshot.data?.docs.map((e) => e.data()).toList();
                 return ListView.builder(itemBuilder: (buildContext,index){
                   return TaskWidget(data![index]);
                 },itemCount: data!.length, );
