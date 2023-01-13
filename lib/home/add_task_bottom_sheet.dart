@@ -3,6 +3,7 @@ import 'package:todo/database/my_database.dart';
 import 'package:todo/dialoge_utils.dart';
 
 import '../database/task.dart';
+import '../date_utils.dart';
 
 class AddTaskBottomSheet extends StatefulWidget {
   @override
@@ -117,7 +118,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
       Task task = Task(
         title: title,
         description: desc,
-        dateTime: selectedDate,
+        dateTime:dateOnly(selectedDate),
         isDone: false
       );
       showLoading(context, 'loading...',isCancelable:false);

@@ -5,7 +5,14 @@ import 'package:todo/database/my_database.dart';
 import 'package:todo/database/task.dart';
 import 'package:todo/home/tasks_list/task_widget.dart';
 
-class TasksListTab extends StatelessWidget{
+class TasksListTab extends StatefulWidget{
+  @override
+  State<TasksListTab> createState() => _TasksListTabState();
+}
+
+class _TasksListTabState extends State<TasksListTab> {
+  DateTime selectedDate = DateTime.now();
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -13,11 +20,14 @@ class TasksListTab extends StatelessWidget{
         children: [
           CalendarTimeline(
             showYears: true,
-            initialDate: DateTime.now(),
+            initialDate: selectedDate,
             firstDate: DateTime.now().subtract(Duration(days: 365)),
             lastDate: DateTime.now().add(Duration(days: 365)),
             onDateSelected: (date) {
               //on user choose new date
+              if (date == null) return;
+                selectedDate = date;
+                setState((){});
             },
             leftMargin: 20,
             monthColor: Colors.black,
@@ -30,7 +40,7 @@ class TasksListTab extends StatelessWidget{
           ),
           Expanded(
             child: StreamBuilder<QuerySnapshot<Task>>(
-              stream: MyDatabase.listenForTasksRealTimeUpdates(),
+              stream: MyDatabase.listenForTasksRealTimeUpdates(selectedDate),
               builder: (buildContext,snapshot){
                 if (snapshot.hasError){
                   return Column(
@@ -56,5 +66,4 @@ class TasksListTab extends StatelessWidget{
       ),
     );
   }
-
 }
